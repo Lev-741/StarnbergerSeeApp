@@ -18,7 +18,7 @@ export function Speedometer({ speed }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderRadius: 23,
+    borderRadius: 24,
     paddingHorizontal: 32,
     paddingVertical: 16,
     alignSelf: "center",
