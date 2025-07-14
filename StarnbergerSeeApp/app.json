@@ -27,19 +27,28 @@
     },
     "plugins": [
       "expo-router",
-      "expo-maps",
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow $(StarnbergerSeeApp) to use your location"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "requestLocationPermission": true,
-          "locationPermission": "Allow $(StarnbergerSeeApp) to use your location"
+          "backgroundColor": "#ffffff"
         }
-      ],
-      "expo-maps"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

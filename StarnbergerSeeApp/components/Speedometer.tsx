@@ -1,32 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
-  speed: number
+  speed: number | undefined | null;
 }
 
-export function Speedometer({speed}: Props) {
-
+export function Speedometer({ speed }: Props) {
+  const speedRounded = speed?.toFixed(1)
+  const topInset = useSafeAreaInsets().top;
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{speed + " km/h"}</Text>
+    <View style={[styles.container, { marginTop: topInset }]}>
+      <Text style={styles.text}>{speedRounded ?? "-"} km/h</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 25,
     paddingHorizontal: 32,
     paddingVertical: 16,
-    display: "flex",
-    justifyContent:"center",
-    alignItems:"center",
-    marginTop: 64,
-    marginHorizontal: 16,
+    alignSelf: "center",
   },
   text: {
-    fontSize: 32
-  }
+    fontSize: 32,
+  },
 });
