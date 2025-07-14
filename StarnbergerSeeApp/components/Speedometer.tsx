@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function Speedometer({ speed }: Props) {
-  const speedRounded = speed?.toFixed(1)
+  const speedRounded = speed?.toFixed(1);
   const topInset = useSafeAreaInsets().top;
   return (
     <View style={[styles.container, { marginTop: topInset }]}>
@@ -18,7 +18,7 @@ export function Speedometer({ speed }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderRadius: 25,
+    borderRadius: 24,
     paddingHorizontal: 32,
     paddingVertical: 16,
     alignSelf: "center",
