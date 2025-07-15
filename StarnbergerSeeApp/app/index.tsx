@@ -87,8 +87,6 @@ export default function HomeScreen() {
     alarmState = true;
   }
 
-  console.log(pointInsideTest);
-
   if (Platform.OS === "ios") {
     return (
       <>
