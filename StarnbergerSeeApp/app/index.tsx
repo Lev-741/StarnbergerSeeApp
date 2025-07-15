@@ -9,8 +9,8 @@ import {
   AppleMapsPolygon,
   AppleMapsPolyline,
 } from "expo-maps/build/apple/AppleMaps.types";
-import { island1, island2, outerLines } from "@/data/outerLine";
-import { Feature, Polygon, Position } from "geojson";
+import { outerLines } from "@/data/outerLine";
+import { Feature, Point, Polygon, Position } from "geojson";
 import * as turf from "@turf/turf";
 import { pointToPolygonDistance, point, polygon } from "@turf/turf";
 
@@ -18,13 +18,6 @@ const StarnbergerSeeCoordinates: Coordinates = {
   latitude: 47.9166,
   longitude: 11.3166,
 };
-
-const slowWaterZone: Coordinates[] = [
-  { latitude: 47.89428923505896, longitude: 11.271948378651132 },
-  { latitude: 47.99428923505896, longitude: 11.271948378651132 },
-  { latitude: 47.89428923505896, longitude: 11.371948378651132 },
-  { latitude: 47.89428923505896, longitude: 11.271948378651132 },
-];
 
 const innerLine: Feature<Polygon> = {
   type: "Feature",
@@ -42,37 +35,14 @@ const bufferedCoordinates = buffered.geometry.coordinates[0];
 
 const ring = [...outerLines, ...bufferedCoordinates.reverse(), outerLines[0]];
 
-const pointInside = point([11.276004, 47.901059]);
-
 const ringTurf = polygon([ring]);
-
-const allPolyLines: AppleMapsPolyline[] = [{ coordinates: slowWaterZone }];
 
 const convertToCoordinates = (numbers: number[]) => ({
   latitude: numbers[1],
   longitude: numbers[0],
 });
 
-const outerLineCoordinates: Coordinates[] =
-  outerLines.map(convertToCoordinates);
-const island1Coordinates: Coordinates[] = island1.map(convertToCoordinates);
-const island2Coordinates: Coordinates[] = island2.map(convertToCoordinates);
-const innerLineCoordinates: Coordinates[] =
-  bufferedCoordinates.map(convertToCoordinates);
 const ringCoordinates: Coordinates[] = ring.map(convertToCoordinates);
-
-const marker: AppleMapsMarker[] = [
-  { coordinates: outerLineCoordinates[0], title: "outerLineStart" },
-  { coordinates: innerLineCoordinates[0], title: "innerLineStart" },
-  {
-    coordinates: outerLineCoordinates[outerLineCoordinates.length - 1],
-    title: "outerLineEnd",
-  },
-  {
-    coordinates: innerLineCoordinates[innerLineCoordinates.length - 1],
-    title: "innerLineEnd",
-  },
-];
 
 const outerLineAppleCoordinates: AppleMapsPolygon[] = [
   { coordinates: ringCoordinates, color: "rgba(255, 0, 0, 0.5))" },
@@ -98,9 +68,24 @@ export default function HomeScreen() {
     );
   }, []);
 
+  const locationCoordinatesLat = location?.coords.latitude ?? 0;
+  const locationCoordinatesLong = location?.coords.longitude ?? 0;
+
+  const pointInsideCoordinates: number[] = [];
+
+  pointInsideCoordinates.push(locationCoordinatesLong, locationCoordinatesLat);
+
+  const pointInside = point(pointInsideCoordinates);
+
   const pointInsideTest = pointToPolygonDistance(pointInside, ringTurf, {
     units: "meters",
   });
+
+  let alarmState = false;
+
+  if (pointInsideTest < 0 && locationSpeed > 10) {
+    alarmState = true;
+  }
 
   console.log(pointInsideTest);
 
@@ -114,10 +99,9 @@ export default function HomeScreen() {
             zoom: 11.3,
           }}
           polygons={outerLineAppleCoordinates}
-          markers={marker}
         />
         <View style={styles.overlay}>
-          <Speedometer speed={locationSpeed} />
+          <Speedometer speed={locationSpeed} warning={alarmState} />
           {/* <SettingsButton /> */}
         </View>
       </>
