@@ -11,25 +11,26 @@ export function Speedometer({ speed, warning }: Props) {
   const topInset = useSafeAreaInsets().top;
   const overwriteStyle = {
     marginTop: topInset,
-    backgroundColor: warning ? "red" : "white",
-  
+    backgroundColor: warning
+      ? "rgba(255, 0, 0, 0.66))"
+      : "rgba(255, 255, 255, 0.66))",
   };
 
   const overwriteStyleText = {
     color: warning ? "white" : "black",
-  
   };
 
   return (
     <View style={[styles.container, overwriteStyle]}>
-      <Text style={[styles.text, overwriteStyleText]}>{speedRounded ?? "-"} km/h</Text>
+      <Text style={[styles.text, overwriteStyleText]}>
+        {speedRounded ?? "-"} km/h
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     borderRadius: 24,
     paddingHorizontal: 32,
     paddingVertical: 16,

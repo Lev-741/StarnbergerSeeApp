@@ -1,30 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from "react-native";
+import { Icon } from "./Icon";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+interface Props extends TouchableOpacityProps {}
 
-
-
-export function SettingsButton() {
-
+export const SettingsButton = (props: Props) => {
+  const bottomInset = useSafeAreaInsets().bottom;
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{"Einstellungen"}</Text>
-    </View>
+    <TouchableOpacity
+      style={{ ...styles.container, bottom: bottomInset }}
+      {...props}
+    >
+      <Icon icon="settings" size={32} />
+    </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     borderRadius: 25,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    display: "flex",
-    justifyContent:"center",
-    alignItems:"center",
-    marginTop: 64,
-    marginHorizontal: 16,
+    padding: 12,
   },
-  text: {
-    fontSize: 32
-  }
 });
