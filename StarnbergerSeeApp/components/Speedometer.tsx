@@ -1,5 +1,8 @@
+import { SettingsButton } from "@/components/SettingsButton";
+import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 
 interface Props {
   speed: number | undefined | null;
@@ -25,6 +28,7 @@ export function Speedometer({ speed, warning }: Props) {
       <Text style={[styles.text, overwriteStyleText]}>
         {speedRounded ?? "-"} km/h
       </Text>
+      <SettingsButton onPress={() => router.navigate("/settings")} />
     </View>
   );
 }
@@ -35,6 +39,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 16,
     alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "row",
   },
   text: {
     fontSize: 32,

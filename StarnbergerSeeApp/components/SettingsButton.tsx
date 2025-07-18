@@ -1,20 +1,16 @@
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
-  TouchableOpacityProps,
-  View,
+  TouchableOpacityProps
 } from "react-native";
 import { Icon } from "./Icon";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props extends TouchableOpacityProps {}
 
 export const SettingsButton = (props: Props) => {
-  const bottomInset = useSafeAreaInsets().bottom;
   return (
     <TouchableOpacity
-      style={{ ...styles.container, bottom: bottomInset }}
+      style={{ ...styles.container}}
       {...props}
     >
       <Icon icon="settings" size={32} />
@@ -24,7 +20,6 @@ export const SettingsButton = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 25,
-    padding: 12,
+    paddingLeft: 16,
   },
 });

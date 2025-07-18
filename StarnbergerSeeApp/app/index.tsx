@@ -1,30 +1,24 @@
-import { useState, useEffect } from "react";
-import { Platform, StyleSheet, View, Text, Vibration } from "react-native";
 import { Speedometer } from "@/components/Speedometer";
-import { SettingsButton } from "@/components/SettingsButton";
-import { AppleMaps, Coordinates, GoogleMaps } from "expo-maps";
+import { useSettings } from "@/context/SettingsContext";
+import { harborMarkers } from "@/data/harbors";
+import { outerLines } from "@/data/outerLine";
+import { getSimulatedRoute } from "@/data/simulatedTestTrack";
+import * as turf from "@turf/turf";
+import { point, pointToPolygonDistance, polygon } from "@turf/turf";
+import { useAudioPlayer } from "expo-audio";
 import * as Location from "expo-location";
+import { AppleMaps, Coordinates, GoogleMaps } from "expo-maps";
 import {
   AppleMapsMarker,
   AppleMapsPolygon,
 } from "expo-maps/build/apple/AppleMaps.types";
-import { outerLines } from "@/data/outerLine";
-import { Feature, Polygon } from "geojson";
-import * as turf from "@turf/turf";
-import { pointToPolygonDistance, point, polygon } from "@turf/turf";
-import { getSimulatedRoute } from "@/data/simulatedTestTrack";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { useKeepAwake } from "expo-keep-awake";
-import { harborMarkers } from "@/data/harbors";
-import { router } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useSettings } from "@/context/SettingsContext";
-const harborIcon = require("@/assets/images/anchor.png");
-import { useAudioPlayer } from "expo-audio";
+// eslint-disable-next-line import/no-unresolved
+import { Feature, Polygon } from "geojson";
+import { useEffect, useState } from "react";
+import { Platform, StyleSheet, Text, Vibration, View } from "react-native";
 
 const audioSource = require("@/assets/alert2.mp3");
-
-const player = useAudioPlayer(audioSource);
 
 const simulatedRoute = getSimulatedRoute();
 
@@ -63,7 +57,8 @@ const outerLineAppleCoordinates: AppleMapsPolygon[] = [
 ];
 
 export default function HomeScreen() {
-  const bottomInset = useSafeAreaInsets().bottom;
+
+  const player = useAudioPlayer(audioSource);
   // useKeepAwake();
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
@@ -198,12 +193,7 @@ export default function HomeScreen() {
         />
         <View style={styles.overlay}>
           <Speedometer speed={locationSpeed} warning={alarmState} />
-          <View
-            style={{ ...styles.floatingButtonContainer, bottom: bottomInset }}
-          >
-            <SettingsButton onPress={() => router.navigate("/settings")} />
-            {/* Add more buttons here */}
-          </View>
+          
         </View>
       </>
     );
@@ -223,11 +213,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    paddingTop: 8,
-  },
-  floatingButtonContainer: {
-    position: "absolute",
-    right: 16,
-    gap: 8,
+    paddingTop: 0,
   },
 });
